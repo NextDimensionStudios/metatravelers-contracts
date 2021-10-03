@@ -19,6 +19,10 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, Owna
     Counters.Counter private _tokenIdTracker;
     string private _baseTokenURI;
 
+    /**
+     * @dev Initializes the contract with the name, symbol, and baseTokenURI,
+     * and pauses the contract by default
+     */
     constructor (
         string memory name,
         string memory symbol,
@@ -32,8 +36,8 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, Owna
     event AssetsMinted(address owner, uint256 quantity);
 
     /**
-    * @dev Update the base token URI for returning metadata
-    */
+     * @dev Update the base token URI for returning metadata
+     */
     function setBaseTokenURI(string memory baseTokenURI) external onlyOwner {
         _baseTokenURI = baseTokenURI;
     }
