@@ -2,24 +2,47 @@ const { expectRevert } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 
-const MAX_SUPPLY = 7777;
-const MAX_QUANTITY = 3;
-const PRICE = 0.123;
-const MAX_RESERVE = 33;
-const baseTokenURI = 'baseTokenURI/';
-
-let metaTravelers, owner, address1, address2;
-
 describe('MetaTravelers', function () {
-  this.beforeEach(async () => {
-    const MetaTravelers = await hre.ethers.getContractFactory('MetaTravelers');
+  const MAX_SUPPLY = 7777;
+  const MAX_QUANTITY = 3;
+  const PRICE = 0.123;
+  const MAX_RESERVE = 33;
+  const baseTokenURI = 'baseTokenURI/';
+
+  let owner, address1, address2;
+  let MetaTravelers, VrfCoordinatorMock, LinkToken, keyhash, fee;
+  let alice, bob, carol, dev;
+
+  before(async () => {
+    [owner, address1, address2] = await ethers.getSigners();
+
+    MetaTravelers = await hre.ethers.getContractFactory('MetaTravelers');
+    VrfCoordinatorMock = await hre.ethers.getContractFactory(
+      'VRFCoordinatorMock'
+    );
+    LinkToken = await hre.ethers.getContractFactory('LinkToken');
+    keyhash =
+      '0x6c3699283bda56ad74f6b855546325b68d482e983852a7a82979cc4807b641f4';
+    fee = '100000000000000000';
+  });
+
+  let metaTravelers, linkToken, vrfCoordinatorMock;
+  beforeEach(async () => {
+    linkToken = await LinkToken.connect(owner).deploy();
+
+    await linkToken.deployed();
+    vrfCoordinatorMock = await VrfCoordinatorMock.deploy(linkToken.address);
+
     metaTravelers = await MetaTravelers.deploy(
       'MetaTravelers',
       'MT',
-      baseTokenURI
+      baseTokenURI,
+      vrfCoordinatorMock.address,
+      linkToken.address,
+      keyhash,
+      fee
     );
     await metaTravelers.deployed();
-    [owner, address1, address2] = await ethers.getSigners();
   });
 
   it('should revert if the provided tokenId does not exist', async () => {
