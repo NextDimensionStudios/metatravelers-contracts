@@ -1,8 +1,6 @@
-const {
-  expectRevert // Assertions for transactions that should fail
-} = require('@openzeppelin/test-helpers');
-
+const { expectRevert } = require('@openzeppelin/test-helpers');
 const { ethers } = require('hardhat');
+
 let metaTravelers;
 
 describe('MetaTravelers', function () {
