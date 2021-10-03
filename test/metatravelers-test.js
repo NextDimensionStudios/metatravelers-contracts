@@ -42,6 +42,19 @@ describe('MetaTravelers', function () {
     );
   });
 
+  it('should revert if value sent is not enough', async () => {
+    const value = PRICE / 2;
+    const quantity = 1;
+    const total = value * quantity;
+
+    await expectRevert(
+      metaTravelers.mint(address1.address, quantity, {
+        value: ethers.utils.parseEther(total.toString())
+      }),
+      'Ether value sent is not correct'
+    );
+  });
+
   it('should revert if value sent is less than the price', async () => {
     const price = PRICE / 2;
     const quantity = 1;
@@ -54,9 +67,6 @@ describe('MetaTravelers', function () {
       'Ether value sent is not correct'
     );
   });
-
-  // TODO: Write test
-  it('should revert if new supply exceeds max supply', async () => {});
 
   it('should mint the specified quantity', async () => {
     const total = PRICE * MAX_QUANTITY;
