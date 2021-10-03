@@ -25,6 +25,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, Owna
     )
     ERC721(name, symbol) {
         _baseTokenURI = baseTokenURI;
+        _pause();
     }
 
     event AssetsMinted(address owner, uint256 quantity);
