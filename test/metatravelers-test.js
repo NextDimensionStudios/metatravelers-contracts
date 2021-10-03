@@ -1,6 +1,7 @@
 const { expectRevert } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
+ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.ERROR);
 
 describe('MetaTravelers', function () {
   const MAX_SUPPLY = 7777;
@@ -9,9 +10,12 @@ describe('MetaTravelers', function () {
   const MAX_RESERVE = 33;
   const baseTokenURI = 'baseTokenURI/';
 
+  const keyhash =
+    '0x6c3699283bda56ad74f6b855546325b68d482e983852a7a82979cc4807b641f4';
+  const fee = '100000000000000000';
+
   let owner, address1, address2;
-  let MetaTravelers, VrfCoordinatorMock, LinkToken, keyhash, fee;
-  let alice, bob, carol, dev;
+  let MetaTravelers, VrfCoordinatorMock, LinkToken;
 
   before(async () => {
     [owner, address1, address2] = await ethers.getSigners();
@@ -21,9 +25,6 @@ describe('MetaTravelers', function () {
       'VRFCoordinatorMock'
     );
     LinkToken = await hre.ethers.getContractFactory('LinkToken');
-    keyhash =
-      '0x6c3699283bda56ad74f6b855546325b68d482e983852a7a82979cc4807b641f4';
-    fee = '100000000000000000';
   });
 
   let metaTravelers, linkToken, vrfCoordinatorMock;
@@ -132,6 +133,51 @@ describe('MetaTravelers', function () {
     await metaTravelers.setBaseTokenURI(newBaseTokenURI);
     tokenURI = await metaTravelers.tokenURI(0);
     expect(tokenURI).to.equal(`${newBaseTokenURI}0`);
+  });
+
+  it('should revert if setStartingIndex is called without LINK', async () => {
+    await expectRevert(
+      metaTravelers.setStartingIndex(),
+      'Not enough LINK - fill contract with faucet'
+    );
+  });
+
+  it('should set startingIndex if the contract has LINK', async () => {
+    await linkToken
+      .connect(owner)
+      .transfer(metaTravelers.address, ethers.utils.parseEther('100'));
+    let randomRequest = await metaTravelers.connect(owner).setStartingIndex();
+    const result = await randomRequest.wait();
+
+    let event = result.events[result.events.length - 1].args;
+    await vrfCoordinatorMock.callBackWithRandomness(
+      event.toString(),
+      '10000',
+      metaTravelers.address
+    );
+
+    let newStartingIndex = await metaTravelers.startingIndex();
+    expect(newStartingIndex).to.not.equal(0);
+  });
+
+  it('should revert if startingIndex is already set', async () => {
+    await linkToken
+      .connect(owner)
+      .transfer(metaTravelers.address, ethers.utils.parseEther('100'));
+    let randomRequest = await metaTravelers.connect(owner).setStartingIndex();
+    const result = await randomRequest.wait();
+
+    let event = result.events[result.events.length - 1].args;
+    await vrfCoordinatorMock.callBackWithRandomness(
+      event.toString(),
+      '10000',
+      metaTravelers.address
+    );
+
+    await expectRevert(
+      metaTravelers.connect(owner).setStartingIndex(),
+      'Starting index is already set'
+    );
   });
 
   it('should revert if contract is paused', async () => {

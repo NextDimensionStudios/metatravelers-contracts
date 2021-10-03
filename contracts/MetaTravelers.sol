@@ -103,11 +103,12 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      * @dev Set the startingIndex using Chainlink VRF for provable on-chain randomness
      * See callback function 'fulfillRandomness'
      */
-    function setStartingIndex() public {
+    function setStartingIndex() public returns (bytes32) {
         require(startingIndex == 0, "Starting index is already set");
         require(LINK.balanceOf(address(this)) >= _fee, "Not enough LINK - fill contract with faucet");
         bytes32 requestId = requestRandomness(_keyHash, _fee);
         emit RequestedRandomness(requestId);
+        return requestId;
     }
 
     /**
