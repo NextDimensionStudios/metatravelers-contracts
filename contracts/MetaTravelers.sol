@@ -85,10 +85,16 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, Owna
         _unpause();
     }
     
+    /**
+     * @dev Required due to inheritance
+     */
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721Enumerable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }     
 
+    /**
+     * @dev Required due to inheritance
+     */
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override(ERC721, ERC721Enumerable, ERC721Pausable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }   
