@@ -5,8 +5,7 @@ const { ethers } = require('hardhat');
 const MAX_SUPPLY = 7777;
 const MAX_QUANTITY = 3;
 const PRICE = 0.123;
-const tokenName = 'NDS Test';
-const tokenSymbol = 'NDS1';
+const MAX_RESERVE = 33;
 const baseTokenURI = 'baseTokenURI/';
 
 let metaTravelers, owner, address1, address2;
@@ -23,7 +22,7 @@ describe('MetaTravelers', function () {
     [owner, address1, address2] = await ethers.getSigners();
   });
 
-  it('Should revert if the provided tokenId does not exist', async () => {
+  it('should revert if the provided tokenId does not exist', async () => {
     await expectRevert(
       metaTravelers.tokenURI(0),
       'ERC721Metadata: URI query for nonexistent token.'
@@ -83,6 +82,35 @@ describe('MetaTravelers', function () {
     }
   });
 
+  it('should reserve the correct quantity', async () => {
+    await metaTravelers.unpause({ from: owner.address });
+    await metaTravelers.reserveMetaTravelers();
+    tokenURI = await metaTravelers.tokenURI(MAX_RESERVE - 1);
+
+    for (i = 0; i < MAX_RESERVE; i++) {
+      tokenURI = await metaTravelers.tokenURI(i);
+      expect(tokenURI).to.equal(`${baseTokenURI}${i}`);
+    }
+  });
+
+  it('should update the baseTokenURI to the expected value', async () => {
+    const quantity = 1;
+    const total = PRICE * quantity;
+
+    await metaTravelers.unpause({ from: owner.address });
+    await metaTravelers.mint(address1.address, quantity, {
+      value: ethers.utils.parseEther(total.toString())
+    });
+
+    let tokenURI = await metaTravelers.tokenURI(0);
+    expect(tokenURI).to.equal(`${baseTokenURI}0`);
+
+    const newBaseTokenURI = 'newBaseTokenURI/';
+    await metaTravelers.setBaseTokenURI(newBaseTokenURI);
+    tokenURI = await metaTravelers.tokenURI(0);
+    expect(tokenURI).to.equal(`${newBaseTokenURI}0`);
+  });
+
   it('should revert if contract is paused', async () => {
     const quantity = 1;
 
@@ -109,24 +137,34 @@ describe('MetaTravelers', function () {
     expect(Number(newBalance)).is.greaterThan(Number(originalBalance));
   });
 
+  it('should revert if non-owner tries to reserve MetaTravelers', async () => {
+    await expectRevert(
+      metaTravelers.connect(address1).reserveMetaTravelers(),
+      'Ownable: caller is not the owner'
+    );
+  });
+
   it('should revert if non-owner tries to pause', async () => {
     await expectRevert(
       metaTravelers.connect(address1).pause(),
       'Ownable: caller is not the owner'
     );
   });
+
   it('should revert if non-owner tries to unpause', async () => {
     await expectRevert(
       metaTravelers.connect(address1).unpause(),
       'Ownable: caller is not the owner'
     );
   });
+
   it('should revert if non-owner tries to set base token URI', async () => {
     await expectRevert(
       metaTravelers.connect(address1).setBaseTokenURI('newBaseTokenURI'),
       'Ownable: caller is not the owner'
     );
   });
+
   it('should revert if non-owner tries to withdraw', async () => {
     await expectRevert(
       metaTravelers.connect(address1).withdraw(),

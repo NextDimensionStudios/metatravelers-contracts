@@ -11,12 +11,13 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, Owna
     using Counters for Counters.Counter;
     using Strings for uint256;
 
-    uint256 public maxSupply = 7777;
+    uint256 public constant PRICE = .123 ether;
+    uint256 public constant MAX_QUANTITY = 3;
+    uint256 public constant MAX_SUPPLY = 7777;
+    uint256 public constant MAX_RESERVE = 33;
 
     Counters.Counter private _tokenIdTracker;
     string private _baseTokenURI;
-    uint256 private constant PRICE = .123 ether;
-    uint256 private constant MAX_QUANTITY = 3;
 
     constructor (
         string memory name,
@@ -45,7 +46,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, Owna
      * See {ERC721-_mint}.
      */
     function mint(address to, uint256 quantity) external payable {
-        require( totalSupply() + quantity <= maxSupply, "Purchase exceeds max supply");
+        require( totalSupply() + quantity <= MAX_SUPPLY, "Purchase exceeds max supply");
         require(quantity <= MAX_QUANTITY, "Order exceeds max quantity");
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
 
@@ -54,6 +55,17 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, Owna
             _tokenIdTracker.increment();
         }
         emit AssetsMinted(to, quantity);
+    }
+
+    /**
+     * @dev Reserve MetaTravelers
+     */
+    function reserveMetaTravelers() public onlyOwner {
+        for(uint256 i=0; i<MAX_RESERVE; i++){
+            _safeMint(_msgSender(), _tokenIdTracker.current());
+            _tokenIdTracker.increment();
+        }
+        emit AssetsMinted(_msgSender(), MAX_RESERVE);
     }
 
     /**
@@ -70,7 +82,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, Owna
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token.");
         return bytes(_baseTokenURI).length > 0 ? string(abi.encodePacked(_baseTokenURI, tokenId.toString())) : "";
-    }   
+    }
 
     /**
      * @dev Used to pause contract minting per ERC721Pausable
