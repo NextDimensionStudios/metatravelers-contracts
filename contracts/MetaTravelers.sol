@@ -69,7 +69,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      *
      * See {ERC721-_mint}.
      */
-    function mint(address to, uint256 quantity) external payable {
+    function publicMint(address to, uint256 quantity) external payable {
         require( totalSupply() + quantity <= MAX_SUPPLY, "Purchase exceeds max supply");
         require(quantity <= MAX_QUANTITY, "Order exceeds max quantity");
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
