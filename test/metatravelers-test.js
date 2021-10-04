@@ -58,7 +58,7 @@ describe('MetaTravelers', function () {
     const total = PRICE * wrongQuantity;
 
     await expectRevert(
-      metaTravelers.publicMint(address1.address, wrongQuantity, {
+      metaTravelers.publicSaleMint(address1.address, wrongQuantity, {
         value: ethers.utils.parseEther(total.toString())
       }),
       'Order exceeds max quantity'
@@ -71,7 +71,7 @@ describe('MetaTravelers', function () {
     const total = value * quantity;
 
     await expectRevert(
-      metaTravelers.publicMint(address1.address, quantity, {
+      metaTravelers.publicSaleMint(address1.address, quantity, {
         value: ethers.utils.parseEther(total.toString())
       }),
       'Ether value sent is not correct'
@@ -84,7 +84,7 @@ describe('MetaTravelers', function () {
     const total = price * quantity;
 
     await expectRevert(
-      metaTravelers.publicMint(address1.address, quantity, {
+      metaTravelers.publicSaleMint(address1.address, quantity, {
         value: ethers.utils.parseEther(total.toString())
       }),
       'Ether value sent is not correct'
@@ -95,7 +95,7 @@ describe('MetaTravelers', function () {
     const total = PRICE * MAX_QUANTITY;
 
     await metaTravelers.unpause({ from: owner.address });
-    await metaTravelers.publicMint(address1.address, MAX_QUANTITY, {
+    await metaTravelers.publicSaleMint(address1.address, MAX_QUANTITY, {
       value: ethers.utils.parseEther(total.toString())
     });
 
@@ -122,7 +122,7 @@ describe('MetaTravelers', function () {
     const total = PRICE * quantity;
 
     await metaTravelers.unpause({ from: owner.address });
-    await metaTravelers.publicMint(address1.address, quantity, {
+    await metaTravelers.publicSaleMint(address1.address, quantity, {
       value: ethers.utils.parseEther(total.toString())
     });
 
@@ -195,7 +195,7 @@ describe('MetaTravelers', function () {
     const quantity = 1;
 
     await expectRevert(
-      metaTravelers.publicMint(address1.address, quantity, {
+      metaTravelers.publicSaleMint(address1.address, quantity, {
         value: ethers.utils.parseEther(PRICE.toString())
       }),
       'ERC721Pausable: token transfer while paused'
@@ -206,7 +206,7 @@ describe('MetaTravelers', function () {
     const quantity = 1;
 
     await metaTravelers.unpause({ from: owner.address });
-    await metaTravelers.publicMint(address1.address, quantity, {
+    await metaTravelers.publicSaleMint(address1.address, quantity, {
       value: ethers.utils.parseEther(PRICE.toString())
     });
 
