@@ -36,8 +36,8 @@
       ]
     },
     "C:\\Users\\jmcke\\Documents\\Client Work\\Next Dimension Studios\\MetaTravelers\\metatravelers-contracts\\contracts\\MetaTravelers.sol": {
-      "lastModificationDate": 1633297774524,
-      "contentHash": "007d8de3596bc8ad245349a1a33b540d",
+      "lastModificationDate": 1633310443675,
+      "contentHash": "b1cc9e4d018f0ead740ba99643a9a8b8",
       "sourceName": "contracts/MetaTravelers.sol",
       "solcConfig": {
         "version": "0.8.7",

@@ -105,9 +105,9 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      */
     function setStartingIndex() public returns (bytes32) {
         bytes memory tempProvenanceHash = bytes(provenanceHash); 
-        require(tempProvenanceHash.length > 0, "Cannot set starting index without provenance hash");
+        require(tempProvenanceHash.length > 0, "Need to set provenance hash");
         require(startingIndex == 0, "Starting index is already set");
-        require(LINK.balanceOf(address(this)) >= _fee, "Not enough LINK - fill contract with faucet");
+        require(LINK.balanceOf(address(this)) >= _fee, "Not enough LINK");
         bytes32 requestId = requestRandomness(_keyHash, _fee);
         emit RequestedRandomness(requestId);
         return requestId;

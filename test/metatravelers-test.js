@@ -137,10 +137,7 @@ describe('MetaTravelers', function () {
 
   it('should revert if setStartingIndex is called without LINK', async () => {
     await metaTravelers.connect(owner).setProvenanceHash('provenanceHash');
-    await expectRevert(
-      metaTravelers.setStartingIndex(),
-      'Not enough LINK - fill contract with faucet'
-    );
+    await expectRevert(metaTravelers.setStartingIndex(), 'Not enough LINK');
   });
 
   it('should set startingIndex if the contract has LINK', async () => {
@@ -190,7 +187,7 @@ describe('MetaTravelers', function () {
 
     await expectRevert(
       metaTravelers.connect(owner).setStartingIndex(),
-      'Cannot set starting index without provenance hash'
+      'Need to set provenance hash'
     );
   });
 
