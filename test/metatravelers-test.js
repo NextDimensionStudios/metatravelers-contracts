@@ -136,6 +136,7 @@ describe('MetaTravelers', function () {
   });
 
   it('should revert if setStartingIndex is called without LINK', async () => {
+    await metaTravelers.connect(owner).setProvenanceHash('provenanceHash');
     await expectRevert(
       metaTravelers.setStartingIndex(),
       'Not enough LINK - fill contract with faucet'
@@ -143,6 +144,7 @@ describe('MetaTravelers', function () {
   });
 
   it('should set startingIndex if the contract has LINK', async () => {
+    await metaTravelers.connect(owner).setProvenanceHash('provenanceHash');
     await linkToken
       .connect(owner)
       .transfer(metaTravelers.address, ethers.utils.parseEther('100'));
@@ -161,6 +163,7 @@ describe('MetaTravelers', function () {
   });
 
   it('should revert if startingIndex is already set', async () => {
+    await metaTravelers.connect(owner).setProvenanceHash('provenanceHash');
     await linkToken
       .connect(owner)
       .transfer(metaTravelers.address, ethers.utils.parseEther('100'));
@@ -177,6 +180,17 @@ describe('MetaTravelers', function () {
     await expectRevert(
       metaTravelers.connect(owner).setStartingIndex(),
       'Starting index is already set'
+    );
+  });
+
+  it('should revert if setting startingIndex without provenanceHash', async () => {
+    await linkToken
+      .connect(owner)
+      .transfer(metaTravelers.address, ethers.utils.parseEther('100'));
+
+    await expectRevert(
+      metaTravelers.connect(owner).setStartingIndex(),
+      'Cannot set starting index without provenance hash'
     );
   });
 
@@ -209,6 +223,13 @@ describe('MetaTravelers', function () {
   it('should revert if non-owner tries to reserve MetaTravelers', async () => {
     await expectRevert(
       metaTravelers.connect(address1).reserveMetaTravelers(),
+      'Ownable: caller is not the owner'
+    );
+  });
+
+  it('should revert if non-owner tries to set the provenanceHash', async () => {
+    await expectRevert(
+      metaTravelers.connect(address1).setProvenanceHash('provenanceHash'),
       'Ownable: caller is not the owner'
     );
   });
