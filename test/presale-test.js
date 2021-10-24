@@ -51,7 +51,7 @@ describe('PreSale Tests', () => {
     );
   });
 
-  it('should revert if preSale is not live', async () => {
+  it('should revert if PreSale is not live', async () => {
     await expectRevert(
       metaTravelers.preSaleMint(address1.address, MAX_QUANTITY, {
         value: ethers.utils.parseEther(PRICE.toString())

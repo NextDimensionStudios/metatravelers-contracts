@@ -217,8 +217,6 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         emit AssetsMinted(to, quantity);
     }
 
-
-
     /**
      * @dev Reserve MetaTravelers
      */
