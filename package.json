@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Smart contracts for minting MetaTravelers on the Ethereum blockchain",
   "main": "index.js",
-  "scripts": {
-    "test": "test"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NextDimensionStudios/metatravelers-contracts.git"

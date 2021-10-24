@@ -53,7 +53,7 @@ describe('MetaTravelers', function () {
     );
   });
 
-  it('should revert if quantity exceeds max quantity', async () => {
+  it('should revert if ordered quantity exceeds max quantity', async () => {
     const wrongQuantity = MAX_QUANTITY + 1;
     const total = PRICE * wrongQuantity;
 
@@ -100,7 +100,7 @@ describe('MetaTravelers', function () {
     });
 
     let tokenURI;
-    for (i = 0; i < MAX_QUANTITY; i++) {
+    for (i = 1; i < MAX_QUANTITY; i++) {
       tokenURI = await metaTravelers.tokenURI(i);
       expect(tokenURI).to.equal(`${baseTokenURI}${i}`);
     }
@@ -111,7 +111,7 @@ describe('MetaTravelers', function () {
     await metaTravelers.reserveMetaTravelers();
     tokenURI = await metaTravelers.tokenURI(MAX_RESERVE - 1);
 
-    for (i = 0; i < MAX_RESERVE; i++) {
+    for (i = 1; i < MAX_RESERVE; i++) {
       tokenURI = await metaTravelers.tokenURI(i);
       expect(tokenURI).to.equal(`${baseTokenURI}${i}`);
     }
@@ -126,13 +126,13 @@ describe('MetaTravelers', function () {
       value: ethers.utils.parseEther(total.toString())
     });
 
-    let tokenURI = await metaTravelers.tokenURI(0);
-    expect(tokenURI).to.equal(`${baseTokenURI}0`);
+    let tokenURI = await metaTravelers.tokenURI(1);
+    expect(tokenURI).to.equal(`${baseTokenURI}1`);
 
     const newBaseTokenURI = 'newBaseTokenURI/';
     await metaTravelers.setBaseTokenURI(newBaseTokenURI);
-    tokenURI = await metaTravelers.tokenURI(0);
-    expect(tokenURI).to.equal(`${newBaseTokenURI}0`);
+    tokenURI = await metaTravelers.tokenURI(1);
+    expect(tokenURI).to.equal(`${newBaseTokenURI}1`);
   });
 
   it('should revert if setStartingIndex is called without LINK', async () => {

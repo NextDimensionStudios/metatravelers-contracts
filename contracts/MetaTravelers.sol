@@ -29,13 +29,14 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     uint256 public constant MAX_MINTPASS = 4995;
     
     mapping(address => bool) private _earlyAdopterList;
-    mapping(address => bool) private _presaleList;
+    mapping(address => bool) private _preSaleList;
     mapping(address => uint256) private _earlyAdopterPurchased;
-    mapping(address => uint256) private _presalePurchased;
+    mapping(address => uint256) private _preSalePurchased;
+    mapping(address => uint256) private _mintPassQuantity;
 
     bool public isEarlyAdopterSale = false;
-    bool public isPresale = false;
-    bool public isMintpassSale = false;
+    bool public isPreSale = false;
+    bool public isMintPassSale = false;
     bool public isPublicSale = false;
 
     /**
@@ -87,7 +88,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      * @dev Add wallet addresses to the Early Adopter mappings used for private sale
      */
     function addToEarlyAdopterList(address[] calldata addresses) external onlyOwner {
-        for (uint256 i = 0; i < addresses.length; i++) {
+        for(uint256 i = 0; i < addresses.length; i++) {
             require(addresses[i] != address(0), "Cannot add null address");
             require(!_earlyAdopterList[addresses[i]], "Duplicate entry");
             _earlyAdopterList[addresses[i]] = true;
@@ -95,14 +96,54 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     }
 
     /**
-     * @dev Add wallet addresses to the Early Adopter lists used for private sale
+     * @dev Add wallet addresses to the PreSale mappings used for private sale
      */
-    function addToPresaleList(address[] calldata addresses) external onlyOwner {
-        for (uint256 i = 0; i < addresses.length; i++) {
+    function addToPreSaleList(address[] calldata addresses) external onlyOwner {
+        for(uint256 i = 0; i < addresses.length; i++) {
             require(addresses[i] != address(0), "Cannot add null address");
-            require(!_presaleList[addresses[i]], "Duplicate entry");
-            _presaleList[addresses[i]] = true;
+            require(!_preSaleList[addresses[i]], "Duplicate entry");
+            _preSaleList[addresses[i]] = true;
         }
+    }
+
+    /**
+     * @dev Add wallet addresses to the Mint Pass mapping used for private sale
+     */
+    function addToMintPassList(address[] calldata addresses, uint256[] calldata quantities) external onlyOwner {
+        require(addresses.length == quantities.length);
+        for(uint256 i = 0; i < addresses.length; i++) {
+            require(addresses[i] != address(0), "Cannot add null address");
+            _mintPassQuantity[addresses[i]] = quantities[i];
+        }
+    }
+
+    /**
+     * @dev Toggle whether early adopter minting is enabled/disabled
+     */
+    function toggleEarlyAdopter() external onlyOwner {
+        isEarlyAdopterSale = !isEarlyAdopterSale;
+    }
+
+    /**
+     * @dev Toggle whether preSale minting is enabled/disabled
+     */
+    function togglePreSale() external onlyOwner {
+        isPreSale = !isPreSale;
+    }
+
+    /**
+     * @dev Toggle whether mint pass minting is enabled/disabled
+     */
+    function toggleMintPassSale() external onlyOwner {
+        isMintPassSale = !isMintPassSale;
+    }
+
+    /**
+     * @dev Base minting function to be reused by other minting functions
+     */
+    function _baseMint(address to) private {
+        _tokenIdTracker.increment();
+        _mint(to, _tokenIdTracker.current());
     }
 
     /**
@@ -116,28 +157,43 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
-            _tokenIdTracker.increment();
             _earlyAdopterPurchased[_msgSender()]++;
-            _mint(to, _tokenIdTracker.current());
+            _baseMint(to);
         }
         emit AssetsMinted(to, quantity);
     }
 
     /**
-     * @dev Presale restricted to a list of specified wallet address
+     * @dev PreSale restricted to a list of specified wallet address
      */
-    function presaleMint(address to, uint256 quantity) external payable {
-        require(isPresale, 'Presale is not live');
-        require(_presaleList[_msgSender()], "User not on Presale list");
-        require(totalSupply() + quantity <= MAX_PRESALE, "Presale is sold out");
-        require(_earlyAdopterPurchased[_msgSender()] + _presalePurchased[_msgSender()] 
+    function preSaleMint(address to, uint256 quantity) external payable {
+        require(isPreSale, 'PreSale is not live');
+        require(_preSaleList[_msgSender()], "User not on PreSale list");
+        require(totalSupply() + quantity <= MAX_PRESALE, "PreSale is sold out");
+        require(_earlyAdopterPurchased[_msgSender()] + _preSalePurchased[_msgSender()] 
             + quantity <= MAX_QUANTITY, "Limit per wallet exceeded");
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
-            _tokenIdTracker.increment();
-            _presalePurchased[_msgSender()]++;
-            _mint(to, _tokenIdTracker.current());
+            _preSalePurchased[_msgSender()]++;
+            _baseMint(to);
+        }
+        emit AssetsMinted(to, quantity);
+    }
+
+    /**
+     * @dev Mint pass sale based on snapshot of mint pass holders
+     */
+    function mintPassMint(address to, uint256 quantity) external payable {
+        require(isMintPassSale, 'Mint pass sale is not live');
+        require(_mintPassQuantity[_msgSender()] > 0, "User does not have valid mint pass");
+        require(totalSupply() + quantity <= MAX_MINTPASS, "Mint pass sale is sold out");
+        require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
+        
+        for(uint256 i=0; i<quantity; i++){
+            require(_mintPassQuantity[_msgSender()] > 0, "No mint pass mints left");
+            _mintPassQuantity[_msgSender()]--;
+            _baseMint(to);
         }
         emit AssetsMinted(to, quantity);
     }
@@ -156,11 +212,12 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
-            _mint(to, _tokenIdTracker.current());
-            _tokenIdTracker.increment();
+            _baseMint(to);
         }
         emit AssetsMinted(to, quantity);
     }
+
+
 
     /**
      * @dev Reserve MetaTravelers
