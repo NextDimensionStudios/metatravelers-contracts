@@ -26,8 +26,8 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     uint256 public constant MAX_SUPPLY = 7777;
     uint256 public constant MAX_RESERVE = 33;
     uint256 public constant MAX_EARLY_ADOPTER = 1665;
-    uint256 public constant MAX_PRESALE = 3330;
-    uint256 public constant MAX_MINTPASS = 5661;
+    uint256 public constant MAX_PRESALE = 1665;
+    uint256 public constant MAX_MINTPASS = 2331;
     
     mapping(address => bool) private _earlyAdopterList;
     mapping(address => bool) private _preSaleList;
@@ -170,7 +170,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     function preSaleMint(address to, uint256 quantity) external payable {
         require(isPreSale, 'PreSale is not live');
         require(_preSaleList[_msgSender()], "User not on PreSale list");
-        require(totalSupply() + quantity <= MAX_PRESALE, "PreSale is sold out");
+        require(totalSupply() + quantity <= MAX_EARLY_ADOPTER + MAX_PRESALE, "PreSale is sold out");
         require(_earlyAdopterPurchased[_msgSender()] + _preSalePurchased[_msgSender()] 
             + quantity <= MAX_QUANTITY, "Limit per wallet exceeded");
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
@@ -188,7 +188,8 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     function mintPassMint(address to, uint256 quantity) external payable {
         require(isMintPassSale, 'Mint pass sale is not live');
         require(_mintPassQuantity[_msgSender()] > 0, "User does not have valid mint pass");
-        require(totalSupply() + quantity <= MAX_MINTPASS, "Mint pass sale is sold out");
+        require(totalSupply() + quantity <= MAX_EARLY_ADOPTER + MAX_PRESALE + 
+            MAX_MINTPASS, "Mint pass sale is sold out");
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
