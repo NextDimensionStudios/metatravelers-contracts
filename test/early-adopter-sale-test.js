@@ -5,6 +5,7 @@ ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.ERROR);
 
 describe('Early Adopter Sale Tests', () => {
   const MAX_QUANTITY = 3;
+  const MAX_EA_QUANTITY = 5;
   const PRICE = 0.123;
   const baseTokenURI = 'baseTokenURI/';
 
@@ -88,8 +89,10 @@ describe('Early Adopter Sale Tests', () => {
     await expectRevert(
       metaTravelers
         .connect(address1)
-        .earlyAdopterMint(address1.address, MAX_QUANTITY + 1, {
-          value: ethers.utils.parseEther(PRICE.toString())
+        .earlyAdopterMint(address1.address, MAX_EA_QUANTITY + 1, {
+          value: ethers.utils.parseEther(
+            ((MAX_EA_QUANTITY + 1) * PRICE).toString()
+          )
         }),
       'Limit per wallet exceeded'
     );

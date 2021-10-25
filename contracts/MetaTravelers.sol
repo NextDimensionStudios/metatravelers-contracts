@@ -22,11 +22,12 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      */
     uint256 public constant PRICE = .123 ether;
     uint256 public constant MAX_QUANTITY = 3;
+    uint256 public constant MAX_EA_QUANTITY = 5; // max quantity that each early adopter tokens can mint
     uint256 public constant MAX_SUPPLY = 7777;
     uint256 public constant MAX_RESERVE = 33;
-    uint256 public constant MAX_EARLY_ADOPTER = 999;
-    uint256 public constant MAX_PRESALE = 2664;
-    uint256 public constant MAX_MINTPASS = 4995;
+    uint256 public constant MAX_EARLY_ADOPTER = 1665;
+    uint256 public constant MAX_PRESALE = 3330;
+    uint256 public constant MAX_MINTPASS = 5661;
     
     mapping(address => bool) private _earlyAdopterList;
     mapping(address => bool) private _preSaleList;
@@ -153,7 +154,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(isEarlyAdopterSale, 'Early Adopter sale is not live');
         require(_earlyAdopterList[_msgSender()], "User not on Early Adopter list");
         require(totalSupply() + quantity <= MAX_EARLY_ADOPTER, "Early Adopter sale is sold out");
-        require(_earlyAdopterPurchased[_msgSender()] + quantity <= MAX_QUANTITY, "Limit per wallet exceeded");
+        require(_earlyAdopterPurchased[_msgSender()] + quantity <= MAX_EA_QUANTITY, "Limit per wallet exceeded");
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
