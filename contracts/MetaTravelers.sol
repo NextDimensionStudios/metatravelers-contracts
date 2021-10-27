@@ -22,7 +22,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      */
     uint256 public constant PRICE = .123 ether;
     uint256 public constant MAX_QUANTITY = 3;
-    uint256 public constant MAX_EA_QUANTITY = 5; // max quantity that each early adopter tokens can mint
+    uint256 public constant MAX_EA_QUANTITY = 5; // max quantity that each early adopter can mint
     uint256 public constant MAX_SUPPLY = 7777;
     uint256 public constant MAX_RESERVE = 33;
     uint256 public constant MAX_EARLY_ADOPTER = 1665;

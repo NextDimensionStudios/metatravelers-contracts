@@ -1,15 +1,14 @@
-# Basic Sample Hardhat Project
+# Smart Contract for MetaTravelers Minting
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+The purpose of this contract is to provide minting of MetaTravelers, based on the ERC-721 standard. The minting process will happen sequentially via 4 sales - Early Adopter, Presale, Mint Pass, and Public Sale (in that order).
 
-Try running some of the following tasks:
+Early Adopters will be able to mint up to 5 per wallet address. Presale and Public sale addresses will be able to mint up to 3 each. Mint Pass holder's quantities will vary depending on the amount of Mint Passes the address holds at the time of the snapshot (3 mints per mint pass).
+
+The contract will also make one call to Chainlink VRF to determine a randomized startingIndex.
+
+This project is setup using Hardhat and includes unit testing coverage for most of the code.
+Use the following command to run all tests.
 
 ```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
 npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
 ```
