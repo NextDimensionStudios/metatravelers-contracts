@@ -1,10 +1,17 @@
 require('@nomiclabs/hardhat-waffle')
 require('@nomiclabs/hardhat-web3')
+require('dotenv')
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
+	networks: {
+		rinkeby: {
+			url: process.env.RINKEBY_URL,
+			accounts: [process.env.RINKEBY_ACCOUNT],
+		},
+	},
 	solidity: {
 		compilers: [
 			{
