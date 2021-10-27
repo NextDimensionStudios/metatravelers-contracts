@@ -4,7 +4,7 @@ The purpose of this contract is to provide minting of MetaTravelers, based on th
 
 Early Adopters will be able to mint up to 5 per wallet address. Presale and Public sale addresses will be able to mint up to 3 each. Mint Pass holder's quantities will vary depending on the amount of Mint Passes the address holds at the time of the snapshot (3 mints per mint pass).
 
-The contract will also make one call to Chainlink VRF to determine a randomized startingIndex.
+The contract will also make one call to Chainlink VRF to determine a randomized startingIndex to be used for metadata shuffling.
 
 This project is setup using Hardhat and includes unit testing coverage for most of the code.
 Use the following command to run all tests.
