@@ -12,3 +12,5 @@ Use the following command to run all tests.
 ```shell
 npx hardhat test
 ```
+
+To use on mainnet or testnets, replace values within `.env.example` and then rename file to `.env`
