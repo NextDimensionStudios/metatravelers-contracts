@@ -1,6 +1,6 @@
 require('@nomiclabs/hardhat-waffle')
 require('@nomiclabs/hardhat-web3')
-require('dotenv')
+require('dotenv').config()
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -9,9 +9,9 @@ module.exports = {
 	networks: {
 		rinkeby: {
 			// Infura or Alchemy API
-			url: process.env.RINKEBY_URL,
+			url: `${process.env.RINKEBY_URL}`,
 			// Private key
-			accounts: [process.env.RINKEBY_ACCOUNT],
+			accounts: [`${process.env.RINKEBY_ACCOUNT}`],
 		},
 	},
 	solidity: {
