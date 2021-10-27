@@ -6,13 +6,13 @@ require('dotenv').config()
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
+	defaultNetwork: "hardhat",
 	networks: {
-		rinkeby: {
-			// Infura or Alchemy API
-			url: `${process.env.RINKEBY_URL}`,
-			// Private key
-			accounts: [`${process.env.RINKEBY_ACCOUNT}`],
-		},
+		hardhat: {},
+		// rinkeby: {
+		// 	url: `${process.env.RINKEBY_URL}`,
+		// 	accounts: [`${process.env.RINKEBY_ACCOUNT}`],
+		// },
 	},
 	solidity: {
 		compilers: [
