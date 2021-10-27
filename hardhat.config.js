@@ -8,7 +8,9 @@ require('dotenv')
 module.exports = {
 	networks: {
 		rinkeby: {
+			// Infura or Alchemy API
 			url: process.env.RINKEBY_URL,
+			// Private key
 			accounts: [process.env.RINKEBY_ACCOUNT],
 		},
 	},
