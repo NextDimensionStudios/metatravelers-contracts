@@ -14,3 +14,9 @@ npx hardhat test
 ```
 
 To use on mainnet or testnets, replace values within `.env.example` and then rename file to `.env`
+
+To run scripts on a specific network:
+
+```
+npx hardhat run scripts/SCRIPT_NAME.js --network NETWORK_NAME
+```
