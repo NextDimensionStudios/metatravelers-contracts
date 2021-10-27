@@ -6,7 +6,7 @@ Early Adopters will be able to mint up to 5 per wallet address. Presale and Publ
 
 The contract will also make one call to Chainlink VRF to determine a randomized startingIndex to be used for metadata shuffling.
 
-This project is setup using Hardhat and includes unit testing coverage for most of the code.
+This project is setup using Hardhat and includes testing coverage for most of the code.
 Use the following command to run all tests.
 
 ```shell
