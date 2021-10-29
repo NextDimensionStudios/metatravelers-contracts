@@ -229,7 +229,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     /**
      * @dev Reserve MetaTravelers
      */
-    function reserveMetaTravelers() public onlyOwner {
+    function reserveMetaTravelers() external onlyOwner {
         for(uint256 i=0; i<MAX_RESERVE; i++){
             _safeMint(_msgSender(), _tokenIdTracker.current());
             _tokenIdTracker.increment();
@@ -240,7 +240,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     /**
      * @dev Set the provenanceHash used for verifying fair and random distribution
      */
-    function setProvenanceHash(string memory newProvenanceHash) public onlyOwner {
+    function setProvenanceHash(string memory newProvenanceHash) external onlyOwner {
         provenanceHash = newProvenanceHash;
     }
 
@@ -248,7 +248,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      * @dev Set the startingIndex using Chainlink VRF for provable on-chain randomness
      * See callback function 'fulfillRandomness'
      */
-    function setStartingIndex() public returns (bytes32) {
+    function setStartingIndex() external returns (bytes32) {
         bytes memory tempProvenanceHash = bytes(provenanceHash); 
         require(tempProvenanceHash.length > 0, "Need to set provenance hash");
         require(startingIndex == 0, "Starting index is already set");
@@ -275,7 +275,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     /**
      * @dev Used to withdraw funds from the contract
      */
-    function withdraw() public onlyOwner() {
+    function withdraw() external onlyOwner() {
         uint256 balance = address(this).balance;
         payable(_msgSender()).transfer(balance);
     }
