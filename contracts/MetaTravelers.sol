@@ -140,6 +140,13 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     }
 
     /**
+     * @dev Toggle whether public sale minting is enabled/disabled
+     */
+    function togglePublicSale() external onlyOwner {
+        isPublicSale = !isPublicSale;
+    }
+
+    /**
      * @dev Base minting function to be reused by other minting functions
      */
     function _baseMint(address to) private {
@@ -208,7 +215,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      * See {ERC721-_mint}.
      */
     function publicSaleMint(address to, uint256 quantity) external payable {
-        // require(isPublicSale, "Public sale is not live"); TODO: Enable and fix unit tests
+        require(isPublicSale, "Public sale is not live");
         require(totalSupply() + quantity <= MAX_SUPPLY, "Purchase exceeds max supply");
         require(quantity <= MAX_QUANTITY, "Order exceeds max quantity");
         require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
