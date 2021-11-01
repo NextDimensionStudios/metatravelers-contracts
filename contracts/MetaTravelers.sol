@@ -3,7 +3,6 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
@@ -11,7 +10,6 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 
 contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFConsumerBase, Ownable {
     using Counters for Counters.Counter;
-    using SafeMath for uint256;
     using Strings for uint256;
 
     Counters.Counter private _tokenIdTracker;
@@ -267,7 +265,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         
         // Prevent default sequence
         if (startingIndex == 0) {
-            startingIndex = startingIndex.add(1);
+            startingIndex += 1;
         }
         emit StartingIndexSet(requestId, randomness);
     }
