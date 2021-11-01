@@ -246,7 +246,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      * @dev Set the startingIndex using Chainlink VRF for provable on-chain randomness
      * See callback function 'fulfillRandomness'
      */
-    function setStartingIndex() external returns (bytes32) {
+    function setStartingIndex() external onlyOwner returns (bytes32) {
         bytes memory tempProvenanceHash = bytes(provenanceHash); 
         require(tempProvenanceHash.length > 0, "Need to set provenance hash");
         require(startingIndex == 0, "Starting index is already set");

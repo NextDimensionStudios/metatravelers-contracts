@@ -139,6 +139,18 @@ describe('MetaTravelers', function () {
     );
   });
 
+  it('should revert if non-owner sets startingIndex', async () => {
+    await metaTravelers.connect(owner).setProvenanceHash('provenanceHash');
+    await linkToken
+      .connect(owner)
+      .transfer(metaTravelers.address, ethers.utils.parseEther('100'));
+
+    await expectRevert(
+      metaTravelers.connect(address1).setStartingIndex(),
+      'Ownable: caller is not the owner'
+    );
+  });
+
   it('should withdraw funds to the contract owner', async () => {
     const quantity = 1;
 
