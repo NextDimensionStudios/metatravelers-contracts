@@ -139,4 +139,21 @@ describe('Mint Pass Sale Tests', () => {
       'Ether value sent is not correct'
     );
   });
+
+  it('should revert if user sends more Ether than required', async () => {
+    const mintPasses = { addresses: [address1.address], quantities: [3] };
+
+    await metaTravelers.unpause();
+    await metaTravelers.toggleMintPassSale();
+    await metaTravelers.addToMintPassList(
+      mintPasses.addresses,
+      mintPasses.quantities
+    );
+    await expectRevert(
+      metaTravelers.connect(address1).mintPassMint(address1.address, 1, {
+        value: ethers.utils.parseEther((PRICE * 2).toString())
+      }),
+      'Ether value sent is not correct'
+    );
+  });
 });

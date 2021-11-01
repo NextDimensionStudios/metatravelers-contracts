@@ -107,6 +107,20 @@ describe('MetaTravelers', function () {
     );
   });
 
+  it('should revert if value sent is more than the price', async () => {
+    const price = PRICE * 2;
+    const quantity = 1;
+    const total = price * quantity;
+
+    await metaTravelers.togglePublicSale();
+    await expectRevert(
+      metaTravelers.publicSaleMint(address1.address, quantity, {
+        value: ethers.utils.parseEther(total.toString())
+      }),
+      'Ether value sent is not correct'
+    );
+  });
+
   it('should mint the specified quantity', async () => {
     const total = PRICE * MAX_QUANTITY;
 

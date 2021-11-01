@@ -160,7 +160,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(_earlyAdopterList[_msgSender()], "User not on Early Adopter list");
         require(totalSupply() + quantity <= MAX_EARLY_ADOPTER, "Early Adopter sale is sold out");
         require(_earlyAdopterPurchased[_msgSender()] + quantity <= MAX_EA_QUANTITY, "Limit per wallet exceeded");
-        require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
+        require(msg.value == PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
             _earlyAdopterPurchased[_msgSender()]++;
@@ -178,7 +178,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(totalSupply() + quantity <= MAX_EARLY_ADOPTER + MAX_PRESALE, "PreSale is sold out");
         require(_earlyAdopterPurchased[_msgSender()] + _preSalePurchased[_msgSender()] 
             + quantity <= MAX_QUANTITY, "Limit per wallet exceeded");
-        require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
+        require(msg.value == PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
             _preSalePurchased[_msgSender()]++;
@@ -195,7 +195,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(_mintPassQuantity[_msgSender()] > 0, "User does not have valid mint pass");
         require(totalSupply() + quantity <= MAX_EARLY_ADOPTER + MAX_PRESALE + 
             MAX_MINTPASS, "Mint pass sale is sold out");
-        require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
+        require(msg.value == PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
             require(_mintPassQuantity[_msgSender()] > 0, "No mint pass mints left");
@@ -216,7 +216,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(isPublicSale, "Public sale is not live");
         require(totalSupply() + quantity <= MAX_SUPPLY, "Purchase exceeds max supply");
         require(quantity <= MAX_QUANTITY, "Order exceeds max quantity");
-        require(msg.value >= PRICE * quantity, "Ether value sent is not correct");
+        require(msg.value == PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
             _baseMint(to);

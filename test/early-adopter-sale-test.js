@@ -122,4 +122,16 @@ describe('Early Adopter Sale Tests', () => {
       'Ether value sent is not correct'
     );
   });
+
+  it('should revert if user sends more Ether than required', async () => {
+    await metaTravelers.unpause();
+    await metaTravelers.toggleEarlyAdopter();
+    await metaTravelers.addToEarlyAdopterList([address1.address]);
+    await expectRevert(
+      metaTravelers.connect(address1).earlyAdopterMint(address1.address, 1, {
+        value: ethers.utils.parseEther((PRICE * 2).toString())
+      }),
+      'Ether value sent is not correct'
+    );
+  });
 });
