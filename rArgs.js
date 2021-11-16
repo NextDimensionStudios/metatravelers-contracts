@@ -1,6 +1,6 @@
 // Rinkeby arguments for etherscan verify
 module.exports = [
-	'MetaTravelers',
+	'MT',
 	'MT',
 	'uri',
 	// Rinkeby LINK
