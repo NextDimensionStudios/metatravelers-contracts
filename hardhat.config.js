@@ -6,13 +6,18 @@ require('dotenv').config()
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-	defaultNetwork: "hardhat",
+	defaultNetwork: 'hardhat',
 	networks: {
 		hardhat: {},
 		// rinkeby: {
 		// 	url: `${process.env.RINKEBY_URL}`,
 		// 	accounts: [`${process.env.RINKEBY_ACCOUNT}`],
 		// },
+	},
+	etherscan: {
+		// Your API key for Etherscan
+		// Obtain one at https://etherscan.io/
+		apiKey: 'YOUR_ETHERSCAN_API_KEY',
 	},
 	solidity: {
 		compilers: [
