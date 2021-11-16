@@ -20,3 +20,12 @@ To run scripts on a specific network:
 ```
 npx hardhat run scripts/SCRIPT_NAME.js --network NETWORK_NAME
 ```
+
+To verify on Etherscan (needs an Etherscan API key):
+
+```
+npx hardhat verify --constructor-args args.js --network NETWORK_NAME DEPLOYED_CONTRACT_ADDRESS
+
+```
+
+More details: https://hardhat.org/plugins/nomiclabs-hardhat-etherscan.html
