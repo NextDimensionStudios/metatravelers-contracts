@@ -60,6 +60,24 @@ describe('Mint Pass Sale Tests', () => {
     );
   });
 
+  it('should return the mint pass quantity available to mint', async () => {
+    expect(
+      await metaTravelers.connect(address1).getMintPassQuantity()
+    ).to.equal(0);
+    const mintPasses = { addresses: [address1.address], quantities: [3] };
+
+    await metaTravelers.unpause();
+    await metaTravelers.toggleMintPassSale();
+    await metaTravelers.addToMintPassList(
+      mintPasses.addresses,
+      mintPasses.quantities
+    );
+
+    expect(
+      await metaTravelers.connect(address1).getMintPassQuantity()
+    ).to.equal(3);
+  });
+
   it('should revert if user does not have valid mint pass', async () => {
     await metaTravelers.toggleMintPassSale();
     await expectRevert(

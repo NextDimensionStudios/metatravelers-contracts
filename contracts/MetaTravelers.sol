@@ -31,6 +31,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     mapping(address => bool) private _preSaleList;
     mapping(address => uint256) private _earlyAdopterPurchased;
     mapping(address => uint256) private _preSalePurchased;
+    mapping(address => uint256) private _publicSalePurchased;
     mapping(address => uint256) private _mintPassQuantity;
 
     bool public isEarlyAdopterSale = false;
@@ -117,6 +118,13 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     }
 
     /**
+     * @dev Returns the quantity available for the message sender to mint during the mint pass sale
+     */
+    function getMintPassQuantity() external view returns (uint256) {
+        return _mintPassQuantity[_msgSender()];
+    }
+
+    /**
      * @dev Toggle whether early adopter minting is enabled/disabled
      */
     function toggleEarlyAdopter() external onlyOwner {
@@ -176,8 +184,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(isPreSale, 'PreSale is not live');
         require(_preSaleList[_msgSender()], "User not on PreSale list");
         require(totalSupply() + quantity <= MAX_EARLY_ADOPTER + MAX_PRESALE, "PreSale is sold out");
-        require(_earlyAdopterPurchased[_msgSender()] + _preSalePurchased[_msgSender()] 
-            + quantity <= MAX_QUANTITY, "Limit per wallet exceeded");
+        require(_preSalePurchased[_msgSender()] + quantity <= MAX_QUANTITY, "Limit per wallet exceeded");
         require(msg.value == PRICE * quantity, "Ether value sent is not correct");
         
         for(uint256 i=0; i<quantity; i++){
@@ -217,8 +224,10 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
         require(totalSupply() + quantity <= MAX_SUPPLY, "Purchase exceeds max supply");
         require(quantity <= MAX_QUANTITY, "Order exceeds max quantity");
         require(msg.value == PRICE * quantity, "Ether value sent is not correct");
+        require(_publicSalePurchased[_msgSender()] + quantity <= MAX_QUANTITY, "Limit per wallet exceeded");
         
         for(uint256 i=0; i<quantity; i++){
+            _publicSalePurchased[_msgSender()]++;
             _baseMint(to);
         }
         emit AssetsMinted(to, quantity);
