@@ -18,14 +18,14 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     /**
      * @dev Minting variables
      */
-    uint256 public constant PRICE = .123 ether;
+    uint256 public constant PRICE = .09 ether;
     uint256 public constant MAX_QUANTITY = 3;
     uint256 public constant MAX_EA_QUANTITY = 5; // max quantity that each early adopter can mint
     uint256 public constant MAX_SUPPLY = 7777;
     uint256 public constant MAX_RESERVE = 33;
-    uint256 public constant MAX_EARLY_ADOPTER = 1665;
-    uint256 public constant MAX_PRESALE = 1665;
-    uint256 public constant MAX_MINTPASS = 2331;
+    uint256 public constant MAX_EARLY_ADOPTER = 2775;
+    uint256 public constant MAX_PRESALE = 2997;
+    uint256 public constant MAX_MINTPASS = 1332;
     
     mapping(address => bool) private _earlyAdopterList;
     mapping(address => bool) private _preSaleList;
