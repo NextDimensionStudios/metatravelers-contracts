@@ -6,7 +6,7 @@ ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.ERROR);
 describe('Early Adopter Sale Tests', () => {
   const MAX_QUANTITY = 3;
   const MAX_EA_QUANTITY = 5;
-  const PRICE = 0.123;
+  const PRICE = 0.09;
   const baseTokenURI = 'baseTokenURI/';
 
   const keyhash =

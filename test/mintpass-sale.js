@@ -5,7 +5,7 @@ ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.ERROR);
 
 describe('Mint Pass Sale Tests', () => {
   const MAX_QUANTITY = 3;
-  const PRICE = 0.123;
+  const PRICE = 0.09;
   const baseTokenURI = 'baseTokenURI/';
 
   const keyhash =

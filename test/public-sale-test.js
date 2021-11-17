@@ -6,7 +6,7 @@ ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.ERROR);
 describe('MetaTravelers', function () {
   const MAX_SUPPLY = 7777;
   const MAX_QUANTITY = 3;
-  const PRICE = 0.123;
+  const PRICE = 0.09;
   const MAX_RESERVE = 33;
   const baseTokenURI = 'baseTokenURI/';
 
