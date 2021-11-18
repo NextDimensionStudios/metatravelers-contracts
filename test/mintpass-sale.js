@@ -61,9 +61,9 @@ describe('Mint Pass Sale Tests', () => {
   });
 
   it('should return the mint pass quantity available to mint', async () => {
-    expect(
-      await metaTravelers.connect(address1).getMintPassQuantity()
-    ).to.equal(0);
+    expect(await metaTravelers.getMintPassQuantity(address1.address)).to.equal(
+      0
+    );
     const mintPasses = { addresses: [address1.address], quantities: [3] };
 
     await metaTravelers.unpause();
@@ -73,9 +73,9 @@ describe('Mint Pass Sale Tests', () => {
       mintPasses.quantities
     );
 
-    expect(
-      await metaTravelers.connect(address1).getMintPassQuantity()
-    ).to.equal(3);
+    expect(await metaTravelers.getMintPassQuantity(address1.address)).to.equal(
+      3
+    );
   });
 
   it('should revert if user does not have valid mint pass', async () => {

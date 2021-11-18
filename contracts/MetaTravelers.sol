@@ -120,8 +120,8 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     /**
      * @dev Returns the quantity available for the message sender to mint during the mint pass sale
      */
-    function getMintPassQuantity() external view returns (uint256) {
-        return _mintPassQuantity[_msgSender()];
+    function getMintPassQuantity(address user) external view returns (uint256) {
+        return _mintPassQuantity[user];
     }
 
     /**
