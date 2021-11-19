@@ -11,14 +11,14 @@ module.exports = {
 	networks: {
 		hardhat: {},
 		rinkeby: {
-			url: 'INFURA OR ALCHEMY KEY',
-			accounts: ['PRIVATE KEY'],
+			url: '',
+			accounts: [''],
 		},
 	},
 	etherscan: {
 		// Your API key for Etherscan
 		// Obtain one at https://etherscan.io/
-		apiKey: 'API KEY',
+		apiKey: '',
 	},
 	solidity: {
 		compilers: [
