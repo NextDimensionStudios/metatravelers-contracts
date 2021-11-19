@@ -238,8 +238,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      */
     function reserveMetaTravelers() external onlyOwner {
         for(uint256 i=0; i<MAX_RESERVE; i++){
-            _safeMint(_msgSender(), _tokenIdTracker.current());
-            _tokenIdTracker.increment();
+            _baseMint(_msgSender());
         }
         emit AssetsMinted(_msgSender(), MAX_RESERVE);
     }

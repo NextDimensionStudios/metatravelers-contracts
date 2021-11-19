@@ -56,12 +56,14 @@ describe('MetaTravelers', function () {
   it('should reserve the correct quantity', async () => {
     await metaTravelers.unpause({ from: owner.address });
     await metaTravelers.reserveMetaTravelers();
-    tokenURI = await metaTravelers.tokenURI(MAX_RESERVE - 1);
+    tokenURI = await metaTravelers.tokenURI(MAX_RESERVE);
 
     for (i = 1; i < MAX_RESERVE; i++) {
       tokenURI = await metaTravelers.tokenURI(i);
       expect(tokenURI).to.equal(`${baseTokenURI}${i}`);
     }
+
+    expect(await metaTravelers.balanceOf(owner.address)).to.equal(33);
   });
 
   it('should update the baseTokenURI to the expected value', async () => {
