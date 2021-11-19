@@ -34,6 +34,7 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
     mapping(address => uint256) private _publicSalePurchased;
     mapping(address => uint256) private _mintPassQuantity;
 
+    bool public isReserveComplete = false;
     bool public isEarlyAdopterSale = false;
     bool public isPreSale = false;
     bool public isMintPassSale = false;
@@ -237,9 +238,11 @@ contract MetaTravelers is ERC721Enumerable, ERC721Pausable, ERC721Burnable, VRFC
      * @dev Reserve MetaTravelers
      */
     function reserveMetaTravelers() external onlyOwner {
+        require(!isReserveComplete, "MetaTravelers: Already reserved");
         for(uint256 i=0; i<MAX_RESERVE; i++){
             _baseMint(_msgSender());
         }
+        isReserveComplete = true;
         emit AssetsMinted(_msgSender(), MAX_RESERVE);
     }
 

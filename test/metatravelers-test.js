@@ -66,6 +66,16 @@ describe('MetaTravelers', function () {
     expect(await metaTravelers.balanceOf(owner.address)).to.equal(33);
   });
 
+  it('should revert when reserving more than once', async () => {
+    await metaTravelers.unpause({ from: owner.address });
+    await metaTravelers.reserveMetaTravelers();
+    tokenURI = await metaTravelers.tokenURI(MAX_RESERVE);
+    await expectRevert(
+      metaTravelers.reserveMetaTravelers(),
+      'MetaTravelers: Already reserved'
+    );
+  });
+
   it('should update the baseTokenURI to the expected value', async () => {
     const quantity = 1;
     const total = PRICE * quantity;
